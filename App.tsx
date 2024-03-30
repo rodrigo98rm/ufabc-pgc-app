@@ -28,6 +28,8 @@ function App(): React.JSX.Element {
         placeholder="Email"
         keyboardType="email-address"
         autoCapitalize="none"
+        testID="email-input"
+        autoCorrect={false}
       />
 
       <TextInput
@@ -37,9 +39,11 @@ function App(): React.JSX.Element {
         placeholder="Password"
         keyboardType="numeric"
         secureTextEntry
+        testID="password-input"
+        autoCorrect={false}
       />
 
-      <Button onPress={validateLogin} title="Login" />
+      <Button onPress={validateLogin} title="Login" testID="login-button" />
 
       {loggedIn && (
         <Text style={{alignSelf: 'center', marginTop: 32}}>
