@@ -9,9 +9,9 @@ const Stack = createNativeStackNavigator();
 function App(): React.JSX.Element {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={Home} />
+      <Stack.Navigator initialRouteName="Login">
         <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Home" component={Home} options={{title: 'Notas'}} />
       </Stack.Navigator>
     </NavigationContainer>
   );

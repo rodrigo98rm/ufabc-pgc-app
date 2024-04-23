@@ -1,15 +1,35 @@
+import {useNavigation} from '@react-navigation/native';
+import axios from 'axios';
 import React, {useState} from 'react';
-import {Button, StyleSheet, Text, TextInput} from 'react-native';
+import {Button, StyleSheet, TextInput, Alert, Platform} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+
+const LOGIN_ENDPOINT =
+  Platform.OS === 'android'
+    ? 'http://10.0.2.2:3000/login'
+    : 'http://localhost:3000/login';
 
 function Login(): React.JSX.Element {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loggedIn, setLoggedIn] = useState(false);
 
-  const validateLogin = () => {
-    if (email === 'rodrigo@teste.com' && password === '123456') {
-      setLoggedIn(true);
+  const navigation = useNavigation<any>();
+
+  const handleLoginButtonPressed = async () => {
+    try {
+      const result = await axios.post(LOGIN_ENDPOINT, {
+        email,
+        password,
+      });
+
+      if (result.status === 200) {
+        navigation.replace('Home');
+      }
+    } catch (err) {
+      Alert.alert(
+        'Login Inválido',
+        'Verifique suas credenciais e tente novamente',
+      );
     }
   };
 
@@ -37,13 +57,11 @@ function Login(): React.JSX.Element {
         autoCorrect={false}
       />
 
-      <Button onPress={validateLogin} title="Login" testID="login-button" />
-
-      {loggedIn && (
-        <Text style={{alignSelf: 'center', marginTop: 32}}>
-          You are now logged in!
-        </Text>
-      )}
+      <Button
+        onPress={handleLoginButtonPressed}
+        title="Login"
+        testID="login-button"
+      />
     </SafeAreaView>
   );
 }
