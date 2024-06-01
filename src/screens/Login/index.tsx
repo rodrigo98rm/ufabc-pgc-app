@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, StyleSheet, TextInput, Alert, Platform} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
@@ -12,8 +12,15 @@ const LOGIN_ENDPOINT =
 function Login(): React.JSX.Element {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loggedIn, setLoggedIn] = useState(true);
 
   const navigation = useNavigation<any>();
+
+  useEffect(() => {
+    if (loggedIn) {
+      navigation.replace('Home');
+    }
+  }, [loggedIn, navigation]);
 
   const handleLoginButtonPressed = async () => {
     try {
@@ -23,7 +30,7 @@ function Login(): React.JSX.Element {
       });
 
       if (result.status === 200) {
-        navigation.replace('Home');
+        setLoggedIn(true);
       }
     } catch (err) {
       Alert.alert(
