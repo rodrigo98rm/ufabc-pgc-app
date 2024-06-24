@@ -7,6 +7,8 @@ import {
   SafeAreaView,
   Pressable,
 } from 'react-native';
+import FloatingActionButton from '../../components/FloatingActionButton';
+import {View} from 'react-native';
 
 type Note = {
   id: number;
@@ -71,6 +73,13 @@ const Home = () => {
         )}
         stickySectionHeadersEnabled
       />
+      <View style={{position: 'absolute', bottom: 8, right: 8}}>
+        <FloatingActionButton
+          onPress={() => {
+            navigation.navigate('NewNote');
+          }}
+        />
+      </View>
     </SafeAreaView>
   );
 };
