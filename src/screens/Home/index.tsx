@@ -1,4 +1,3 @@
-import {useNavigation} from '@react-navigation/native';
 import React, {useState, useEffect, useMemo} from 'react';
 import {
   StyleSheet,
@@ -11,32 +10,28 @@ import FloatingActionButton from '../../components/FloatingActionButton';
 import {View} from 'react-native';
 import {api} from '../../api';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {COLORS} from '../../utils/colors';
 
-type Note = {
-  id: number;
-  title: string;
-  description: string;
-  pinned: boolean;
-  createdAt: string;
-};
+import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-type Section = {
-  title: string;
-  data: Note[];
-};
+type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
-const Home = () => {
-  const navigation = useNavigation<any>();
-
+const Home = ({navigation}: Props) => {
   const [sectionListData, setSectionListData] = useState<Section[]>([]);
+
+  useEffect(() => {
+    navigation.addListener('focus', getNotes);
+    navigation.setOptions({
+      headerStyle: {
+        backgroundColor: COLORS.primary,
+      },
+      headerTintColor: '#fff',
+    });
+  }, [navigation]);
 
   const handleItemSelected = (item: Note) => {
     navigation.navigate('NewNote', item);
   };
-
-  useEffect(() => {
-    navigation.addListener('focus', getNotes);
-  }, [navigation]);
 
   const getNotes = async () => {
     const {data} = await api.get('/notes');

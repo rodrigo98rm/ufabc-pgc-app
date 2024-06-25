@@ -1,15 +1,16 @@
-import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {Button, StyleSheet, TextInput, Alert} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {api} from '../../api';
 
-function Login(): React.JSX.Element {
+import type {NativeStackScreenProps} from '@react-navigation/native-stack';
+
+type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
+
+const Login = ({navigation}: Props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loggedIn, setLoggedIn] = useState(true);
-
-  const navigation = useNavigation<any>();
 
   useEffect(() => {
     if (loggedIn) {
@@ -66,7 +67,7 @@ function Login(): React.JSX.Element {
       />
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   input: {

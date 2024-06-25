@@ -5,7 +5,7 @@ import Login from './src/screens/Login';
 import Home from './src/screens/Home';
 import NewNote from './src/screens/NewNote';
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function App(): React.JSX.Element {
   return (

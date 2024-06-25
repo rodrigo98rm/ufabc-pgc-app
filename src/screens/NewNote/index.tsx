@@ -10,9 +10,12 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {COLORS} from '../../utils/colors';
-import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {api} from '../../api';
+
+import type {NativeStackScreenProps} from '@react-navigation/native-stack';
+
+type Props = NativeStackScreenProps<RootStackParamList, 'NewNote'>;
 
 const HeaderButton = ({onPress}: {onPress: () => void}) => {
   return (
@@ -22,9 +25,7 @@ const HeaderButton = ({onPress}: {onPress: () => void}) => {
   );
 };
 
-const NewNote = () => {
-  const navigation = useNavigation<any>();
-
+const NewNote = ({route, navigation}: Props) => {
   const [loading, setLoading] = useState(false);
 
   const [title, setTitle] = useState('');
@@ -33,25 +34,39 @@ const NewNote = () => {
 
   useEffect(() => {
     navigation.setOptions({
-      title: 'Nova Nota',
+      title: route.params ? 'Editar Nota' : 'Nova Nota',
       headerStyle: {
         backgroundColor: COLORS.primary,
       },
       headerTintColor: '#fff',
-      headerRight: () => <HeaderButton onPress={() => {}} />,
+      // eslint-disable-next-line react/no-unstable-nested-components
+      headerRight: () =>
+        route.params ? <HeaderButton onPress={() => {}} /> : null,
     });
-  }, [navigation]);
+
+    if (route.params) {
+      setTitle(route.params.title);
+      setDescription(route.params.description);
+      setIsPinned(route.params.pinned);
+    }
+  }, [navigation, route]);
 
   const toggleSwitch = () => setIsPinned(previousState => !previousState);
 
   const handleSubmit = async () => {
     setLoading(true);
 
-    await api.post('/notes', {
+    const data = {
       title,
       description,
       pinned: isPinned,
-    });
+    };
+
+    if (route.params) {
+      await api.put(`/notes/${route.params.id}`, data);
+    } else {
+      await api.post('/notes', data);
+    }
 
     setLoading(false);
 
