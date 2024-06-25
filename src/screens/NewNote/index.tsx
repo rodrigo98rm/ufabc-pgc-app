@@ -12,6 +12,7 @@ import {
 import {COLORS} from '../../utils/colors';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {api} from '../../api';
 
 const HeaderButton = ({onPress}: {onPress: () => void}) => {
   return (
@@ -25,6 +26,9 @@ const NewNote = () => {
   const navigation = useNavigation<any>();
 
   const [loading, setLoading] = useState(false);
+
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   const [isPinned, setIsPinned] = useState(false);
 
   useEffect(() => {
@@ -40,17 +44,30 @@ const NewNote = () => {
 
   const toggleSwitch = () => setIsPinned(previousState => !previousState);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setLoading(true);
 
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+    await api.post('/notes', {
+      title,
+      description,
+      pinned: isPinned,
+    });
+
+    setLoading(false);
+
+    navigation.goBack();
   };
 
   return (
     <View>
-      <TextInput style={styles.title} placeholder="Título" />
+      <TextInput
+        style={styles.title}
+        placeholder="Título"
+        value={title}
+        onChangeText={text => {
+          setTitle(text);
+        }}
+      />
       <View style={styles.switchContainer}>
         <Text style={styles.switchText}>Fixar no topo</Text>
         <Switch
@@ -61,7 +78,15 @@ const NewNote = () => {
           value={isPinned}
         />
       </View>
-      <TextInput style={styles.description} multiline placeholder="Descrição" />
+      <TextInput
+        style={styles.description}
+        multiline
+        placeholder="Descrição"
+        value={description}
+        onChangeText={text => {
+          setDescription(text);
+        }}
+      />
 
       {loading ? (
         <ActivityIndicator size="large" />

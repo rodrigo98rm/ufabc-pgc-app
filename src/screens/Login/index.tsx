@@ -1,13 +1,8 @@
 import {useNavigation} from '@react-navigation/native';
-import axios from 'axios';
 import React, {useEffect, useState} from 'react';
-import {Button, StyleSheet, TextInput, Alert, Platform} from 'react-native';
+import {Button, StyleSheet, TextInput, Alert} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-
-const LOGIN_ENDPOINT =
-  Platform.OS === 'android'
-    ? 'http://10.0.2.2:3000/login'
-    : 'http://localhost:3000/login';
+import {api} from '../../api';
 
 function Login(): React.JSX.Element {
   const [email, setEmail] = useState('');
@@ -24,7 +19,7 @@ function Login(): React.JSX.Element {
 
   const handleLoginButtonPressed = async () => {
     try {
-      const result = await axios.post(LOGIN_ENDPOINT, {
+      const result = await api.post('/login', {
         email,
         password,
       });
