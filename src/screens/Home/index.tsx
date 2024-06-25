@@ -73,7 +73,7 @@ const Home = () => {
         )}
         stickySectionHeadersEnabled
       />
-      <View style={{position: 'absolute', bottom: 8, right: 8}}>
+      <View style={styles.fabContainer}>
         <FloatingActionButton
           onPress={() => {
             navigation.navigate('NewNote');
@@ -105,6 +105,11 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 12,
+  },
+  fabContainer: {
+    position: 'absolute',
+    bottom: 8,
+    right: 8,
   },
 });
 
