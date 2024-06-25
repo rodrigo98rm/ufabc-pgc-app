@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,11 +9,14 @@ import {
 } from 'react-native';
 import FloatingActionButton from '../../components/FloatingActionButton';
 import {View} from 'react-native';
+import {api} from '../../api';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 type Note = {
   id: number;
   title: string;
   description: string;
+  pinned: boolean;
   createdAt: string;
 };
 
@@ -22,57 +25,71 @@ type Section = {
   data: Note[];
 };
 
-const DATA: Section[] = [
-  {
-    title: 'Favoritas',
-    data: [
-      {
-        id: 1,
-        title: 'Nova Nota',
-        description: 'Crie uma nova nota',
-        createdAt: new Date().toISOString(),
-      },
-      {
-        id: 2,
-        title: 'Notas',
-        description: 'Veja todas as notas',
-        createdAt: new Date().toISOString(),
-      },
-    ],
-  },
-  {
-    title: 'Notas',
-    data: [],
-  },
-];
-
 const Home = () => {
   const navigation = useNavigation<any>();
+
+  const [sectionListData, setSectionListData] = useState<Section[]>([]);
 
   const handleItemSelected = (item: Note) => {
     navigation.navigate('NewNote', item);
   };
 
+  useEffect(() => {
+    navigation.addListener('focus', getNotes);
+  }, [navigation]);
+
+  const getNotes = async () => {
+    const {data} = await api.get('/notes');
+
+    const pinned = data.filter((note: Note) => note.pinned);
+    const others = data.filter((note: Note) => !note.pinned);
+
+    const sections: Section[] = [
+      {
+        title: 'Favoritas',
+        data: pinned,
+      },
+      {
+        title: 'Notas',
+        data: others,
+      },
+    ];
+
+    setSectionListData(sections);
+  };
+
+  const isListEmpty = useMemo(() => {
+    return sectionListData.every(section => section.data.length === 0);
+  }, [sectionListData]);
+
   return (
     <SafeAreaView style={styles.container}>
-      <SectionList
-        sections={DATA}
-        keyExtractor={item => String(item.id)}
-        renderItem={({item}) => (
-          <Pressable
-            style={styles.item}
-            onPress={() => {
-              handleItemSelected(item);
-            }}>
-            <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.description}>{item.description}</Text>
-          </Pressable>
-        )}
-        renderSectionHeader={({section: {title}}) => (
-          <Text style={styles.header}>{title}</Text>
-        )}
-        stickySectionHeadersEnabled
-      />
+      {isListEmpty ? (
+        <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
+          <Icon name="note-alert" size={100} color="#6b6b6b" />
+          <Text>Nenhuma nota cadastrada</Text>
+          <Text>Crie sua primeira nota clicando no botão "+" abaixo</Text>
+        </View>
+      ) : (
+        <SectionList
+          sections={sectionListData}
+          keyExtractor={item => String(item.id)}
+          renderItem={({item}) => (
+            <Pressable
+              style={styles.item}
+              onPress={() => {
+                handleItemSelected(item);
+              }}>
+              <Text style={styles.title}>{item.title}</Text>
+              <Text style={styles.description}>{item.description}</Text>
+            </Pressable>
+          )}
+          renderSectionHeader={({section: {title}}) => (
+            <Text style={styles.header}>{title}</Text>
+          )}
+          stickySectionHeadersEnabled
+        />
+      )}
       <View style={styles.fabContainer}>
         <FloatingActionButton
           onPress={() => {
@@ -108,8 +125,8 @@ const styles = StyleSheet.create({
   },
   fabContainer: {
     position: 'absolute',
-    bottom: 8,
-    right: 8,
+    bottom: 16,
+    right: 16,
   },
 });
 
