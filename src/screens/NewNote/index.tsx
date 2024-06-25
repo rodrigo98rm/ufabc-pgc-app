@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   TextInput,
@@ -7,12 +7,36 @@ import {
   ActivityIndicator,
   Text,
   Switch,
+  TouchableOpacity,
 } from 'react-native';
 import {COLORS} from '../../utils/colors';
+import {useNavigation} from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+const HeaderButton = ({onPress}: {onPress: () => void}) => {
+  return (
+    <TouchableOpacity onPress={onPress}>
+      <Icon name="trash-can-outline" size={24} color="#fff" />
+    </TouchableOpacity>
+  );
+};
 
 const NewNote = () => {
+  const navigation = useNavigation<any>();
+
   const [loading, setLoading] = useState(false);
   const [isPinned, setIsPinned] = useState(false);
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: 'Nova Nota',
+      headerStyle: {
+        backgroundColor: COLORS.primary,
+      },
+      headerTintColor: '#fff',
+      headerRight: () => <HeaderButton onPress={() => {}} />,
+    });
+  }, [navigation]);
 
   const toggleSwitch = () => setIsPinned(previousState => !previousState);
 
@@ -46,7 +70,7 @@ const NewNote = () => {
           <Button
             title="Salvar"
             onPress={handleSubmit}
-            color={COLORS.secondary}
+            color={COLORS.primary}
           />
         </View>
       )}
