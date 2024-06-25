@@ -60,7 +60,7 @@ const Home = ({navigation}: Props) => {
   return (
     <SafeAreaView style={styles.container}>
       {isListEmpty ? (
-        <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
+        <View style={styles.emptyViewContainer}>
           <Icon name="note-alert" size={100} color="#6b6b6b" />
           <Text>Nenhuma nota cadastrada</Text>
           <Text>Crie sua primeira nota clicando no botão "+" abaixo</Text>
@@ -76,7 +76,9 @@ const Home = ({navigation}: Props) => {
                 handleItemSelected(item);
               }}>
               <Text style={styles.title}>{item.title}</Text>
-              <Text style={styles.description}>{item.description}</Text>
+              <Text style={styles.description} numberOfLines={2}>
+                {item.description}
+              </Text>
             </Pressable>
           )}
           renderSectionHeader={({section: {title}}) => (
@@ -99,30 +101,32 @@ const Home = ({navigation}: Props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 8,
   },
   item: {
     backgroundColor: '#ededed',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
+    padding: 8,
     marginVertical: 2,
   },
   header: {
     fontSize: 24,
     backgroundColor: '#fff',
     padding: 8,
+    color: COLORS.primary,
   },
   title: {
     fontSize: 16,
+    color: '#000',
   },
   description: {
     fontSize: 12,
+    height: 32,
   },
   fabContainer: {
     position: 'absolute',
     bottom: 16,
     right: 16,
   },
+  emptyViewContainer: {justifyContent: 'center', alignItems: 'center', flex: 1},
 });
 
 export default Home;

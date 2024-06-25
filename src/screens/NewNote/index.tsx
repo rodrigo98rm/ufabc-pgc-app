@@ -8,6 +8,8 @@ import {
   Text,
   Switch,
   TouchableOpacity,
+  Modal,
+  Alert,
 } from 'react-native';
 import {COLORS} from '../../utils/colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -32,6 +34,9 @@ const NewNote = ({route, navigation}: Props) => {
   const [description, setDescription] = useState('');
   const [isPinned, setIsPinned] = useState(false);
 
+  const [confirmDeleteModalVisible, setConfirmDeleteModalVisible] =
+    useState(false);
+
   useEffect(() => {
     navigation.setOptions({
       title: route.params ? 'Editar Nota' : 'Nova Nota',
@@ -41,7 +46,13 @@ const NewNote = ({route, navigation}: Props) => {
       headerTintColor: '#fff',
       // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () =>
-        route.params ? <HeaderButton onPress={() => {}} /> : null,
+        route.params ? (
+          <HeaderButton
+            onPress={() => {
+              setConfirmDeleteModalVisible(true);
+            }}
+          />
+        ) : null,
     });
 
     if (route.params) {
@@ -53,7 +64,22 @@ const NewNote = ({route, navigation}: Props) => {
 
   const toggleSwitch = () => setIsPinned(previousState => !previousState);
 
+  const handleDelete = async () => {
+    await api.delete(`/notes/${route.params!.id}`);
+    navigation.goBack();
+  };
+
   const handleSubmit = async () => {
+    if (!title.trim()) {
+      Alert.alert('Erro', 'Preencha o título');
+      return;
+    }
+
+    if (!description.trim()) {
+      Alert.alert('Erro', 'Preencha a descrição');
+      return;
+    }
+
     setLoading(true);
 
     const data = {
@@ -75,6 +101,30 @@ const NewNote = ({route, navigation}: Props) => {
 
   return (
     <View>
+      <Modal
+        animationType="fade"
+        transparent
+        visible={confirmDeleteModalVisible}>
+        <View style={styles.modalBackground}>
+          <View style={styles.modalCard}>
+            <Text style={styles.modalTitle}>Apagar Nota</Text>
+            <Text style={styles.modalBody}>
+              Tem certeza que deseja apagar esta nota?
+            </Text>
+            <View style={styles.modalActionsContainer}>
+              <TouchableOpacity
+                onPress={() => {
+                  setConfirmDeleteModalVisible(false);
+                }}>
+                <Text style={styles.modalCancelAction}>Cancelar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleDelete}>
+                <Text style={styles.modalConfirmAction}>Apagar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
       <TextInput
         style={styles.title}
         placeholder="Título"
@@ -152,6 +202,28 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 12,
   },
+  modalBackground: {
+    backgroundColor: '#00000088',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalCard: {
+    backgroundColor: '#fff',
+    padding: 16,
+    borderRadius: 4,
+    width: '85%',
+  },
+  modalTitle: {fontSize: 20, color: '#000'},
+  modalBody: {marginTop: 8},
+  modalActionsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    gap: 24,
+    marginTop: 16,
+  },
+  modalCancelAction: {fontWeight: 'bold'},
+  modalConfirmAction: {color: '#000', fontWeight: 'bold'},
 });
 
 export default NewNote;
