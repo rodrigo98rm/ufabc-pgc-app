@@ -71,6 +71,7 @@ const Home = ({navigation}: Props) => {
           keyExtractor={item => String(item.id)}
           renderItem={({item}) => (
             <Pressable
+              testID={`list-item-pinned:${item.pinned}-${item.title}`}
               style={styles.item}
               onPress={() => {
                 handleItemSelected(item);

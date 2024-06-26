@@ -21,7 +21,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'NewNote'>;
 
 const HeaderButton = ({onPress}: {onPress: () => void}) => {
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={onPress} testID="delete-note-button">
       <Icon name="trash-can-outline" size={24} color="#fff" />
     </TouchableOpacity>
   );
