@@ -1,16 +1,33 @@
 import React, {useEffect, useState} from 'react';
-import {Button, StyleSheet, TextInput, Alert} from 'react-native';
+import {
+  Button,
+  StyleSheet,
+  TextInput,
+  Alert,
+  View,
+  Text,
+  StatusBar,
+} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {api} from '../../api';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {COLORS} from '../../utils/colors';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
 
 const Login = ({navigation}: Props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    StatusBar.setBackgroundColor(COLORS.background);
+    navigation.setOptions({
+      header: () => null,
+    });
+  }, [navigation]);
 
   useEffect(() => {
     if (loggedIn) {
@@ -37,7 +54,11 @@ const Login = ({navigation}: Props) => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.iconContainer}>
+        <Icon name="notebook" size={100} color="#fff" />
+        <Text style={styles.title}>Bloco de Notas</Text>
+      </View>
       <TextInput
         style={styles.input}
         onChangeText={setEmail}
@@ -60,21 +81,46 @@ const Login = ({navigation}: Props) => {
         autoCorrect={false}
       />
 
-      <Button
-        onPress={handleLoginButtonPressed}
-        title="Login"
-        testID="login-button"
-      />
+      <View style={styles.buttonContainer}>
+        <Button
+          onPress={handleLoginButtonPressed}
+          title="Login"
+          color={COLORS.secondary}
+          testID="login-button"
+        />
+      </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#006d35e4',
+    flex: 1,
+  },
+  iconContainer: {
+    height: 300,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
   input: {
     height: 40,
-    margin: 12,
+    marginHorizontal: 12,
+    marginTop: 12,
     borderWidth: 1,
     padding: 10,
+    backgroundColor: '#fff',
+  },
+  buttonContainer: {
+    width: '100%',
+    paddingHorizontal: 12,
+    marginTop: 16,
   },
 });
 
