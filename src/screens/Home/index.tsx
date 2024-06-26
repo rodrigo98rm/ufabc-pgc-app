@@ -89,6 +89,7 @@ const Home = ({navigation}: Props) => {
       )}
       <View style={styles.fabContainer}>
         <FloatingActionButton
+          testID="new-note-button"
           onPress={() => {
             navigation.navigate('NewNote');
           }}

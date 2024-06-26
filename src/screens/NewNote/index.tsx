@@ -126,6 +126,7 @@ const NewNote = ({route, navigation}: Props) => {
         </View>
       </Modal>
       <TextInput
+        testID="title-input"
         style={styles.title}
         placeholder="Título"
         value={title}
@@ -136,6 +137,7 @@ const NewNote = ({route, navigation}: Props) => {
       <View style={styles.switchContainer}>
         <Text style={styles.switchText}>Fixar no topo</Text>
         <Switch
+          testID="pin-note-switch"
           trackColor={{false: '#3e3e3e', true: '#ffcf75'}}
           thumbColor={isPinned ? COLORS.secondary : '#f4f3f4'}
           ios_backgroundColor="#3e3e3e"
@@ -144,6 +146,7 @@ const NewNote = ({route, navigation}: Props) => {
         />
       </View>
       <TextInput
+        testID="description-input"
         style={styles.description}
         multiline
         placeholder="Descrição"
@@ -158,6 +161,7 @@ const NewNote = ({route, navigation}: Props) => {
       ) : (
         <View style={styles.buttonContainer}>
           <Button
+            testID="save-note-button"
             title="Salvar"
             onPress={handleSubmit}
             color={COLORS.primary}

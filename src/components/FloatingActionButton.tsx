@@ -1,11 +1,11 @@
 import React from 'react';
-import {Pressable, StyleSheet} from 'react-native';
+import {Pressable, PressableProps, StyleSheet} from 'react-native';
 import {COLORS} from '../utils/colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const FloatingActionButton = ({onPress}: {onPress: () => void}) => {
+const FloatingActionButton = ({onPress, ...children}: PressableProps) => {
   return (
-    <Pressable style={styles.container} onPress={onPress}>
+    <Pressable style={styles.container} onPress={onPress} {...children}>
       <Icon name="plus" size={32} color="#fff" />
     </Pressable>
   );
