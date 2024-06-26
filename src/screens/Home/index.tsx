@@ -1,10 +1,11 @@
-import React, {useState, useEffect, useMemo} from 'react';
+import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import {
   StyleSheet,
   Text,
   SectionList,
   SafeAreaView,
   Pressable,
+  TouchableOpacity,
 } from 'react-native';
 import FloatingActionButton from '../../components/FloatingActionButton';
 import {View} from 'react-native';
@@ -13,11 +14,25 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {COLORS} from '../../utils/colors';
 
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const HeaderButton = ({onPress}: {onPress: () => void}) => {
+  return (
+    <TouchableOpacity onPress={onPress} testID="delete-note-button">
+      <Icon name="logout" size={24} color="#fff" />
+    </TouchableOpacity>
+  );
+};
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 const Home = ({navigation}: Props) => {
   const [sectionListData, setSectionListData] = useState<Section[]>([]);
+
+  const handleLogout = useCallback(() => {
+    AsyncStorage.removeItem('loggedIn');
+    navigation.replace('Login');
+  }, [navigation]);
 
   useEffect(() => {
     navigation.addListener('focus', getNotes);
@@ -26,8 +41,16 @@ const Home = ({navigation}: Props) => {
         backgroundColor: COLORS.primary,
       },
       headerTintColor: '#fff',
+      // eslint-disable-next-line react/no-unstable-nested-components
+      headerRight: () => (
+        <HeaderButton
+          onPress={() => {
+            handleLogout();
+          }}
+        />
+      ),
     });
-  }, [navigation]);
+  }, [navigation, handleLogout]);
 
   const handleItemSelected = (item: Note) => {
     navigation.navigate('NewNote', item);

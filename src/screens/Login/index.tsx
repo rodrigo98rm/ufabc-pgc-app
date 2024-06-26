@@ -7,6 +7,7 @@ import {
   View,
   Text,
   StatusBar,
+  ActivityIndicator,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {api} from '../../api';
@@ -14,13 +15,23 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {COLORS} from '../../utils/colors';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
 
 const Login = ({navigation}: Props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    AsyncStorage.getItem('loggedIn').then(value => {
+      if (value === 'true') {
+        setLoggedIn(true);
+      }
+      setLoggedIn(false);
+    });
+  }, []);
 
   useEffect(() => {
     StatusBar.setBackgroundColor(COLORS.background);
@@ -43,6 +54,7 @@ const Login = ({navigation}: Props) => {
       });
 
       if (result.status === 200) {
+        AsyncStorage.setItem('loggedIn', 'true');
         setLoggedIn(true);
       }
     } catch (err) {
@@ -52,6 +64,14 @@ const Login = ({navigation}: Props) => {
       );
     }
   };
+
+  if (loggedIn === null) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={COLORS.secondary} />
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -94,6 +114,12 @@ const Login = ({navigation}: Props) => {
 };
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    backgroundColor: '#006d35e4',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   container: {
     backgroundColor: '#006d35e4',
     flex: 1,
