@@ -8,6 +8,7 @@ import {
   Text,
   StatusBar,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {api} from '../../api';
@@ -34,7 +35,10 @@ const Login = ({navigation}: Props) => {
   }, []);
 
   useEffect(() => {
-    StatusBar.setBackgroundColor(COLORS.background);
+    if (Platform.OS === 'android') {
+      StatusBar.setBackgroundColor(COLORS.background);
+    }
+
     navigation.setOptions({
       header: () => null,
     });
