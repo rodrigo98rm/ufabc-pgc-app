@@ -99,8 +99,13 @@ const Home = ({navigation}: Props) => {
               onPress={() => {
                 handleItemSelected(item);
               }}>
-              <Text style={styles.title}>{item.title}</Text>
-              <Text style={styles.description} numberOfLines={2}>
+              <Text testID="list-item-title" style={styles.title}>
+                {item.title}
+              </Text>
+              <Text
+                testID="list-item-description"
+                style={styles.description}
+                numberOfLines={2}>
                 {item.description}
               </Text>
             </Pressable>
