@@ -1,12 +1,12 @@
 import {expect} from 'detox';
 import {createNote} from '../baseFlows/createNote.base';
 
-describe('Delete note', () => {
+describe('Pin note', () => {
   beforeAll(async () => {
     await device.reloadReactNative();
   });
 
-  it('Should delete a note', async () => {
+  it('Should pin a note', async () => {
     const noteTitle = 'Nota a ser fixada';
     const noteDescription = 'Descricao da nota a ser fixada';
 
