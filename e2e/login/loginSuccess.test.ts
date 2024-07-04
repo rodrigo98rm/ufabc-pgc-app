@@ -1,11 +1,7 @@
 import {expect} from 'detox';
 
-describe('Example', () => {
+describe('Login Success', () => {
   beforeAll(async () => {
-    await device.launchApp();
-  });
-
-  beforeEach(async () => {
     await device.reloadReactNative();
   });
 
@@ -16,6 +12,6 @@ describe('Example', () => {
 
     await element(by.id('login-button')).tap();
 
-    await expect(element(by.text('You are now logged in!'))).toBeVisible();
+    await expect(element(by.text('Notas'))).toBeVisible();
   });
 });

@@ -108,7 +108,7 @@ const Login = ({navigation}: Props) => {
       <View style={styles.buttonContainer}>
         <Button
           onPress={handleLoginButtonPressed}
-          title="Login"
+          title="LOGIN"
           color={COLORS.secondary}
           testID="login-button"
         />
