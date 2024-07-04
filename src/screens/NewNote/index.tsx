@@ -162,7 +162,7 @@ const NewNote = ({route, navigation}: Props) => {
         <View style={styles.buttonContainer}>
           <Button
             testID="save-note-button"
-            title="Salvar"
+            title="SALVAR"
             onPress={handleSubmit}
             color={COLORS.primary}
           />
