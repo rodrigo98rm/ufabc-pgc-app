@@ -6,7 +6,7 @@ describe('Edit note', () => {
     await device.reloadReactNative();
   });
 
-  it('Should edit a note', async () => {
+  it('7 - Should edit a note', async () => {
     const noteTitle = 'Nota a ser editada';
     const noteDescription = 'Descricao da nota a ser editada';
 

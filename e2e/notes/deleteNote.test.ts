@@ -6,7 +6,7 @@ describe('Delete note', () => {
     await device.reloadReactNative();
   });
 
-  it('Should delete a note', async () => {
+  it('6 - Should delete a note', async () => {
     const noteTitle = 'Nota a ser apagada';
     const noteDescription = 'Descricao da nota a ser apagada';
 

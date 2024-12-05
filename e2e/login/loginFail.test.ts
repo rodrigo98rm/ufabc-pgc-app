@@ -5,7 +5,7 @@ describe('Login Fail', () => {
     await device.launchApp();
   });
 
-  it('Login fails', async () => {
+  it('1 - Login fails', async () => {
     await element(by.id('email-input')).typeText('rodrigo@teste.com');
     await element(by.id('password-input')).typeText('12345');
     await element(by.id('login-button')).tap();

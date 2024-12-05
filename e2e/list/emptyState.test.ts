@@ -5,7 +5,7 @@ describe('List empty state', () => {
     await device.reloadReactNative();
   });
 
-  it('List should correctly display an empty state', async () => {
+  it('3 - List should correctly display an empty state', async () => {
     await expect(element(by.text('Nenhuma nota cadastrada'))).toBeVisible();
   });
 });

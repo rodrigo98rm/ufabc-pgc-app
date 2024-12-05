@@ -5,7 +5,7 @@ describe('Login Success', () => {
     await device.reloadReactNative();
   });
 
-  it('should log in successfuly', async () => {
+  it('2 - Should log in successfuly', async () => {
     await element(by.id('email-input')).typeText('rodrigo@teste.com');
 
     await element(by.id('password-input')).typeText('123456');

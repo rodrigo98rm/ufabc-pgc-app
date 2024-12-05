@@ -5,7 +5,7 @@ describe('Create note validation', () => {
     await device.reloadReactNative();
   });
 
-  it('Should display the correct validation errors when creating a note', async () => {
+  it('4 - Should display the correct validation errors when creating a note', async () => {
     const newNoteButton = element(by.id('new-note-button'));
     await newNoteButton.tap();
 
